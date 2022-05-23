@@ -1,17 +1,13 @@
 # GMC - Geometric Multimodal Contrastive Representation Learning
 Official Implementation of "GMC - Geometric Multimodal Contrastive Representation Learning" (https://arxiv.org/abs/2202.03390)
 
-
-## Creating conda environment and setting up the environment
+## Setup/Installation
 ```bash
 conda env create -f gmc.yml
 conda activate GMC
 poetry install
 ```
-
-## Seting up DCA evaluation requiriements
-
-Start by cloning the repository containing [Delaunay approximation algorithm](https://github.com/vlpolyansky/voronoi-boundary-classifier/tree/testing) and run:
+Additionally, to set up the DCA evaluation requirements, start by cloning the repository containing [Delaunay approximation algorithm](https://github.com/vlpolyansky/voronoi-boundary-classifier/tree/testing) and run:
 ```bash
 cd voronoi-boundary-classifier
 git checkout testing
@@ -19,133 +15,91 @@ mkdir build && cd build
 cmake ..
 make VoronoiClassifier_cl
 ```
-and copy `cpp/VoronoiClassifier_cl` to `gmc_code/DelaunayComponentAnalysis/` folder. 
-To check if executable file was built successfully run `gmc_code/DelaunayComponentAnalysis/VoronoiClassifier_cl` and make sure you see the following output
-```bash
-VoronoiClassifier_cl: <path>/voronoi-boundary-classifier/cpp/main_vc.cpp:51: void run_classification(int, char**): Assertion `argc >= 3' failed.
-Aborted (core dumped)
-```
+Copy `cpp/VoronoiClassifier_cl` to `gmc_code/DelaunayComponentAnalysis/` folder. 
 
 
-## Reproducing experiments
-
-### Unsupervised learning problem
-
-To reproduce the results reported in the paper, download the datasets and pretrained models first:
-
+## Download Datasets
 ```bash
 cd gmc_code/
 bash download_unsupervised_dataset.sh
-bash download_unsupervised_pretrain_models.sh
-cd unsupervised/
+bash download_supervised_dataset.sh
+bash download_rl_dataset.sh
 ```
-
-Then set the correct path of your local machine in `ingredients/machine_ingredients.py` file by copying the output of `pwd` to 
+## Experiments
+This repository contains the code to replicate the experiments presented in the [paper](https://arxiv.org/abs/2202.03390) within the `gmc_code` folder. In every experiment, please set up the corresponding local machine path in `ingredients/machine_ingredients.py` file by copying the output of `pwd` to the ingredient file (e.g. for the unsupervised experiment):
 ```bash
+cd unsupervised/
+pwd
+
+# Edit unsupervised/ingredients/machine_ingredients.py
 @machine_ingredient.config
 def machine_config():
-    m_path = "copy-output-pf-pwd-here"
+    m_path = "copy-output-of-pwd-here"
 ```
 
-You can then evaluate a pretrained GMC model on the downstream classification task, for example, on image modality:
-
+To replicate the results, download the pretrained models:
 ```bash
-python main_unsupervised.py -f with experiment.evaluation_mods=[1] experiment.stage="evaluate_downstream_classifier"
+cd gmc_code/
+bash download_unsupervised_pretrain_models.sh
+bash download_supervised_pretrain_models.sh
+bash download_rl_pretrain_models.sh
 ```
 
-To evaluate on other modalities, choose between `[0], [2], [3]` or `[0,1,2,3]` for complete observations in the `experiment.evaluation_mods` argument in the above code snipped.  To run DCA evaluation, use 
+
+### 1) Unsupervised Learning (MHD)
+
+#### Train Model
 
 ```bash
-python main_unsupervised.py -f with experiment.stage="evaluate_dca"
-```
-
-The results will appear in the `evaluation/gmc_mhd/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and image representations are given in the `joint_m1/DCA_results_version0.log` file. If you wish to train your own models and downstream classifiers, run
-
-```bash
-model="gmc"
-echo "** Train representation model"
+echo "** Train GMC"
 python main_unsupervised.py -f with experiment.stage="train_model" 
 
 echo "** Train classifier"
 python main_unsupervised.py -f with experiment.stage="train_downstream_classfier"
 ```
 
-### Supervised learning problem
-
-To reproduce the results reported in the paper, download the datasets and pretrained models first:
+#### Evaluate/Replicate Results
 
 ```bash
-cd gmc_code/
-bash download_supervised_dataset.sh
-bash download_supervised_pretrain_models.sh
-cd supervised/
+echo "** Evaluate GMC - Classification"
+python main_unsupervised.py -f with experiment.evaluation_mods=[0,1,2,3] experiment.stage="evaluate_downstream_classifier"
+
+echo "** Evaluate GMC - DCA"
+python main_unsupervised.py -f with experiment.stage="evaluate_dca"
 ```
 
-Then set the correct path of your local machine in `ingredients/machine_ingredients.py` file by copying the output of `pwd` to 
+- To evaluate with partial observations, select between `[0], [1], [2], [3]` in `experiment.evaluation_mods`;
+- The DCA results are saved in the `evaluation/gmc_mhd/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and image representations are given in the `joint_m1/DCA_results_version0.log` file.
+
+<br>
+
+### 2) Supervised Learning (CMU-MOSI/CMU-MOSEI)
+
+#### Train Model
+
 ```bash
-@machine_ingredient.config
-def machine_config():
-    m_path = "copy-output-pf-pwd-here"
+echo "** Train representation model"
+python main_supervised.py -f with experiment.scenario="mosei" experiment.stage="train_model" 
 ```
 
-You can then evaluate a pretrained GMC model, for example on the `mosei` downstream classification task on text modality:
+#### Evaluate/Replicate Results
 
 ```bash
-python main_supervised.py -f with experiment.scenario="mosei" experiment.evaluation_mods=[1] experiment.stage="evaluate_downstream_classifier"
-```
+echo "** Evaluate GMC - Classification"
+python main_supervised.py -f with experiment.scenario="mosei" experiment.evaluation_mods=[0,1,2] experiment.stage="evaluate_downstream_classifier"
 
-To evaluate on other modalities, choose between `[0], [2]` or `[0,1,2]` for complete observations in the `experiment.evaluation_mods` argument in the above code snipped.  To run DCA evaluation, use 
-
-```bash
+echo "** Evaluate GMC - DCA"
 python main_supervised.py -f with experiment.scenario="mosei" experiment.stage="evaluate_dca"
 ```
 
-The results will appear in the `evaluation/gmc_mosei/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and text representations are given in the `joint_m1/DCA_results_version0.log` file. Similarly, you can use CMU-MOSI dataset by setting `experiment.scenario="mosi"`
-
-If you wish to train your own models and downstream classifiers, run
-
-```bash
-model="gmc"
-scenario="mosi"
-echo "** Train representation model"
-python main_supervised.py -f with experiment.scenario=$scenario experiment.stage="train_model" 
-```
+- You can use CMU-MOSI dataset for both training and evaluation by setting `experiment.scenario="mosi"`;
+- To evaluate with partial observations, select between `[0], [1], [2]` in `experiment.evaluation_mods`;
+- The DCA results are saved in the `evaluation/gmc_mosei/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and text representations are given in the `joint_m1/DCA_results_version0.log` file.
 
 
+### 3) Reinforcement Learning (Multimodal Atari Games)
 
-### Reinforcement Learning: Pendulum
-
-To reproduce the results reported in the paper, download the datasets and pretrained models first:
-
-```bash
-cd gmc_code/
-bash download_rl_dataset.sh
-bash download_rl_pretrain_models.sh
-cd rl/
-```
-
-Set the correct path of your local machine in `ingredients/machine_ingredients.py` file by copying the output of `pwd` to 
-```bash
-@machine_ingredient.config
-def machine_config():
-    m_path = "copy-output-pf-pwd-here"
-```
-
-You can then evaluate a pretrained GMC model with the downstream controller on sound
-
-```bash
-python main_rl.py -f with experiment.evaluation_mods=[1] experiment.stage="evaluate_downstream_controller"
-```
-
-To evaluate on other modalities, choose between `[0]` or `[0,1]` for complete observations in the `experiment.evaluation_mods` argument in the above code snipped.  To run DCA evaluation, use 
-
-```bash
-python main_rl.py -f with experiment.stage="evaluate_dca"
-```
-
-The results will appear in the `evaluation/gmc_pendulum/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and text representations are given in the `joint_m1/DCA_results_version0.log` file.
-
-If you wish to train your own models and downstream classifiers, run
+#### Train Model
 
 ```bash
 echo "** Train representation model"
@@ -155,6 +109,20 @@ echo "** Train controller"
 python main_rl.py -f with experiment.stage="train_downstream_controller" 
 ```
 
+#### Evaluate/Replicate Results
+
+```bash
+echo "** Evaluate GMC - RL Performance"
+python main_rl.py -f with experiment.evaluation_mods=[0,1] experiment.stage="evaluate_downstream_controller"
+
+echo "** Evaluate GMC - DCA"
+python main_rl.py -f with experiment.stage="evaluate_dca"
+```
+
+- To evaluate with partial observations, select between `[0], [1]` in `experiment.evaluation_mods`;
+- The DCA results are saved in the `evaluation/gmc_pendulum/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and text representations are given in the `joint_m1/DCA_results_version0.log` file.
+
+
 ## Citation
 ```
 @article{poklukar2022gmc,
@@ -163,4 +131,12 @@ python main_rl.py -f with experiment.stage="train_downstream_controller"
   journal={arXiv preprint arXiv:2202.03390},
   year={2022}
 }
+```
+
+## FAQ
+Please report any bugs and I will get to them ASAP. For any additional questions, feel free to email `miguel.vasco[at]tecnico.ulisboa.pt"
+- To check if the DCA executable file was built successfully run `gmc_code/DelaunayComponentAnalysis/VoronoiClassifier_cl` and make sure you see the following output
+```bash
+VoronoiClassifier_cl: <path>/voronoi-boundary-classifier/cpp/main_vc.cpp:51: void run_classification(int, char**): Assertion `argc >= 3' failed.
+Aborted (core dumped)
 ```
