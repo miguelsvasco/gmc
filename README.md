@@ -1,5 +1,9 @@
 # GMC - Geometric Multimodal Contrastive Representation Learning
+
+
 Official Implementation of "GMC - Geometric Multimodal Contrastive Representation Learning" (https://arxiv.org/abs/2202.03390)
+
+![Method](images/gmc_method_horizontal.png)
 
 ## Setup/Installation
 ```bash
