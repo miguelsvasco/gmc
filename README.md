@@ -52,7 +52,7 @@ bash download_rl_pretrain_models.sh
 
 ### 1) Unsupervised Learning (MHD)
 
-#### Train Model
+#### - Train Model
 
 ```bash
 echo "** Train GMC"
@@ -62,7 +62,7 @@ echo "** Train classifier"
 python main_unsupervised.py -f with experiment.stage="train_downstream_classfier"
 ```
 
-#### Evaluate/Replicate Results
+#### - Evaluate/Replicate Results
 
 ```bash
 echo "** Evaluate GMC - Classification"
@@ -78,14 +78,14 @@ python main_unsupervised.py -f with experiment.stage="evaluate_dca"
 
 ### 2) Supervised Learning (CMU-MOSI/CMU-MOSEI)
 
-#### Train Model
+#### - Train Model
 
 ```bash
 echo "** Train representation model"
 python main_supervised.py -f with experiment.scenario="mosei" experiment.stage="train_model" 
 ```
 
-#### Evaluate/Replicate Results
+#### - Evaluate/Replicate Results
 
 ```bash
 echo "** Evaluate GMC - Classification"
@@ -102,7 +102,7 @@ python main_supervised.py -f with experiment.scenario="mosei" experiment.stage="
 
 ### 3) Reinforcement Learning (Multimodal Atari Games)
 
-#### Train Model
+#### - Train Model
 
 ```bash
 echo "** Train representation model"
@@ -112,7 +112,7 @@ echo "** Train controller"
 python main_rl.py -f with experiment.stage="train_downstream_controller" 
 ```
 
-#### Evaluate/Replicate Results
+#### - Evaluate/Replicate Results
 
 ```bash
 echo "** Evaluate GMC - RL Performance"
@@ -127,7 +127,7 @@ python main_rl.py -f with experiment.stage="evaluate_dca"
 
 
 ## FAQ
-Please report any bugs and I will get to them ASAP. For any additional questions, feel free to email `miguel.vasco[at]tecnico.ulisboa.pt"
+Please report any bugs and I will get to them ASAP. For any additional questions, feel free to email `miguel.vasco[at]tecnico.ulisboa.pt".
 - To check if the DCA executable file was built successfully run `gmc_code/DelaunayComponentAnalysis/VoronoiClassifier_cl` and make sure you see the following output
 ```bash
 VoronoiClassifier_cl: <path>/voronoi-boundary-classifier/cpp/main_vc.cpp:51: void run_classification(int, char**): Assertion `argc >= 3' failed.
