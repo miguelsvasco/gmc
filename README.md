@@ -71,7 +71,6 @@ python main_unsupervised.py -f with experiment.stage="evaluate_dca"
 - To evaluate with partial observations, select between `[0], [1], [2], [3]` in `experiment.evaluation_mods`;
 - The DCA results are saved in the `evaluation/gmc_mhd/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and image representations are given in the `joint_m1/DCA_results_version0.log` file.
 
-<br>
 
 ### 2) Supervised Learning (CMU-MOSI/CMU-MOSEI)
 
