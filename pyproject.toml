@@ -1,0 +1,9 @@
+[tool.poetry]
+name = "gmc_code"
+version = "1.0.0"
+description = "Official Implementation of GMC (Geometric Multimodal Contrastive Representation Learning)"
+authors = ["Petra Poklukar", "Miguel Vasco"]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

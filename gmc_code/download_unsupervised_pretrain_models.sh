@@ -1,0 +1,5 @@
+# Pretrained models for the Unsupervised Experiment (Section 5.1)
+
+# GMC
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Ml1Z4VgMmVmBnUvqWG8sZE-EWKc6V6mJ' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1Ml1Z4VgMmVmBnUvqWG8sZE-EWKc6V6mJ" -O ./unsupervised/trained_models/gmc_mhd_model.pth.tar && rm -rf /tmp/cookies.txt
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1bqjrDmF1ft6rB8O8J1dfpUg1kbmd7ezn' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1bqjrDmF1ft6rB8O8J1dfpUg1kbmd7ezn" -O ./unsupervised/trained_models/down_gmc_mhd_model.pth.tar && rm -rf /tmp/cookies.txt

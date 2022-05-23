@@ -122,6 +122,14 @@ python main_rl.py -f with experiment.stage="evaluate_dca"
 - The DCA results are saved in the `evaluation/gmc_pendulum/log_0/results_dca_evaluation/` folder. For example, geometric alignement of complete and text representations are given in the `joint_m1/DCA_results_version0.log` file.
 
 
+## FAQ
+Please report any bugs and I will get to them ASAP. For any additional questions, feel free to email `miguel.vasco[at]tecnico.ulisboa.pt"
+- To check if the DCA executable file was built successfully run `gmc_code/DelaunayComponentAnalysis/VoronoiClassifier_cl` and make sure you see the following output
+```bash
+VoronoiClassifier_cl: <path>/voronoi-boundary-classifier/cpp/main_vc.cpp:51: void run_classification(int, char**): Assertion `argc >= 3' failed.
+Aborted (core dumped)
+```
+
 ## Citation
 ```
 @article{poklukar2022gmc,
@@ -130,12 +138,4 @@ python main_rl.py -f with experiment.stage="evaluate_dca"
   journal={arXiv preprint arXiv:2202.03390},
   year={2022}
 }
-```
-
-## FAQ
-Please report any bugs and I will get to them ASAP. For any additional questions, feel free to email `miguel.vasco[at]tecnico.ulisboa.pt"
-- To check if the DCA executable file was built successfully run `gmc_code/DelaunayComponentAnalysis/VoronoiClassifier_cl` and make sure you see the following output
-```bash
-VoronoiClassifier_cl: <path>/voronoi-boundary-classifier/cpp/main_vc.cpp:51: void run_classification(int, char**): Assertion `argc >= 3' failed.
-Aborted (core dumped)
 ```
