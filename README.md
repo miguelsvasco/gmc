@@ -1,7 +1,16 @@
-# GMC - Geometric Multimodal Contrastive Representation Learning
+# Geometric Multimodal Contrastive Representation Learning
 
 
-Official Implementation of "GMC - Geometric Multimodal Contrastive Representation Learning" (https://arxiv.org/abs/2202.03390)
+Official Implementation of "Geometric Multimodal Contrastive Representation Learning", ICML 2022.
+
+```
+@article{poklukar2022gmc,
+  title={Geometric Multimodal Contrastive Representation Learning},
+  author={Poklukar, Petra and Vasco, Miguel and Yin, Hang and Melo, Francisco S and Paiva, Ana and Kragic, Danica},
+  journal={arXiv preprint arXiv:2202.03390},
+  year={2022}
+}
+```
 
 ![Method](images/gmc_method_horizontal.png)
 
@@ -11,16 +20,7 @@ conda env create -f gmc.yml
 conda activate GMC
 poetry install
 ```
-Additionally, to set up the DCA evaluation requirements, start by cloning the repository containing [Delaunay approximation algorithm](https://github.com/vlpolyansky/voronoi-boundary-classifier/tree/testing) and run:
-```bash
-cd voronoi-boundary-classifier
-git checkout testing
-mkdir build && cd build
-cmake ..
-make VoronoiClassifier_cl
-```
-Copy `cpp/VoronoiClassifier_cl` to `gmc_code/DelaunayComponentAnalysis/` folder. 
-
+Additionally, to set up the Delaunay Component Analysis evaluation framework by following the [instructions on the official repository](https://github.com/petrapoklukar/dca).
 
 ## Download Datasets
 ```bash
@@ -127,20 +127,7 @@ python main_rl.py -f with experiment.stage="evaluate_dca"
 
 
 ## FAQ
-- To check if the DCA executable file was built successfully run `gmc_code/DelaunayComponentAnalysis/VoronoiClassifier_cl` and make sure you see the following output
-```bash
-VoronoiClassifier_cl: <path>/voronoi-boundary-classifier/cpp/main_vc.cpp:51: void run_classification(int, char**): Assertion `argc >= 3' failed.
-Aborted (core dumped)
-```
+
 For any additional questions, feel free to email `miguel.vasco[at]tecnico.ulisboa.pt".
 
 
-## Citation
-```
-@article{poklukar2022gmc,
-  title={GMC--Geometric Multimodal Contrastive Representation Learning},
-  author={Poklukar, Petra and Vasco, Miguel and Yin, Hang and Melo, Francisco S and Paiva, Ana and Kragic, Danica},
-  journal={arXiv preprint arXiv:2202.03390},
-  year={2022}
-}
-```
