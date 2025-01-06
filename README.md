@@ -128,6 +128,6 @@ python main_rl.py -f with experiment.stage="evaluate_dca"
 
 ## FAQ
 
-For any additional questions, feel free to email `miguel.vasco[at]tecnico.ulisboa.pt".
+For any additional questions, feel free to email `miguelsv[at]kth.se".
 
 
